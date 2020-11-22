@@ -1,14 +1,14 @@
-const { Message, MessageEmbed } = require("discord.js");
+const { TextChannel, MessageEmbed } = require("discord.js");
 
 class DiscordEmbedPages {
     constructor({
         pages,
-        message,
+        channel,
         duration,
     } = {}) {
         this.pages = pages instanceof Array ? pages : [];
 
-        this.message = message instanceof Message ? message : null;
+        this.channel = channel instanceof TextChannel ? channel : null;
 
         this.duration = duration instanceof Number ? duration : 60000;
 
@@ -20,7 +20,7 @@ class DiscordEmbedPages {
     }
 
     createPages() {
-        this.message.channel.send({ embed: this.pages[0] }).then(msg => {
+        this.channel.send({ embed: this.pages[0] }).then(msg => {
             this.msg = msg;
             msg.react("◀️").catch(() => null);
             msg.react("▶️").catch(() => null);
