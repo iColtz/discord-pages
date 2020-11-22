@@ -7,9 +7,11 @@ class DiscordEmbedPages {
         duration,
         restricted,
     } = {}) {
-        this.pages = pages instanceof Array ? pages : [];
+        this.validate(pages, channel, duration, restricted);
 
-        this.channel = channel instanceof TextChannel ? channel : null;
+        this.pages = pages;
+
+        this.channel = channel;
 
         this.duration = duration || 60000;
 
@@ -60,6 +62,21 @@ class DiscordEmbedPages {
 
     delete() {
         this.msg.delete().catch(() => null);
+    }
+
+    validate(pages, channel, duration, restricted) {
+        if (!Array.isArray(pages)) {
+            throw new Error("Pages option needs to be an array.");
+        }
+        else if (!(channel instanceof TextChannel)) {
+            throw new Error("Channel needs to be a discord text channel.");
+        }
+        else if (duration && typeof duration !== "number") {
+            throw new Error("Duration needs to be a number.");
+        }
+        else if (restricted && (typeof restricted !== "string" && typeof restricted !== "function" && !Array.isArray(restricted))) {
+            throw new Error("Restricted needs to be a string, object or function");
+        }
     }
 }
 
