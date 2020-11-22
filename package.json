@@ -22,7 +22,9 @@
     "url": "https://github.com/iColtz/discord-pages/issues"
   },
   "homepage": "https://github.com/iColtz/discord-pages#readme",
-  "dependencies": {},
+  "dependencies": {
+    "discord.js": "^12.5.0"
+  },
   "devDependencies": {
     "eslint": "^7.14.0"
   }
