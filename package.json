@@ -11,15 +11,19 @@
     "url": "git+https://github.com/iColtz/discord-pages.git"
   },
   "keywords": [
-      "discord",
-      "embed",
-      "embed pages",
-      "discord pages"
+    "discord",
+    "embed",
+    "embed pages",
+    "discord pages"
   ],
   "author": "iColtz",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/iColtz/discord-pages/issues"
   },
-  "homepage": "https://github.com/iColtz/discord-pages#readme"
+  "homepage": "https://github.com/iColtz/discord-pages#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^7.14.0"
+  }
 }
