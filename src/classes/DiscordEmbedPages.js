@@ -13,34 +13,38 @@ class DiscordEmbedPages {
         });
     }
 
-    async createPages(message) {
-        try {
-            this.msg = await message.channel.send({ embed: this.pages[0] });
-            await this.msg.react("◀️");
-            await this.msg.react("▶️");
-        } catch (error) { return console.warn(error); }
-        const filter = (reaction, user) => user.id === message.author.id;
-        const collector = this.msg.createReactionCollector(filter, { time: 60000 });
-        collector.on("collect", (reaction) => {
-            switch(reaction.emoji.name) {
-            case "▶️":
-                return this.nextPage();
-            case "◀️":
-                return this.previousPage();
-            }
+    createPages(message) {
+        message.channel.send({ embed: this.pages[0] }).then(msg => {
+            this.msg = msg;
+            msg.react("◀️").catch(() => null);
+            msg.react("▶️").catch(() => null);
+            const filter = (reaction, user) => user.id === message.author.id;
+            const collector = msg.createReactionCollector(filter, { time: 60000 });
+            collector.on("collect", (reaction) => {
+                switch(reaction.emoji.name) {
+                case "▶️":
+                    return this.nextPage();
+                case "◀️":
+                    return this.previousPage();
+                }
+            });
         });
     }
 
     nextPage() {
         this.currentPageNumber++;
         if (this.currentPageNumber >= this.pages.length) this.currentPageNumber = 0;
-        this.msg.edit({ embed: this.pages[this.currentPageNumber] });
+        this.msg.edit({ embed: this.pages[this.currentPageNumber] }).catch(() => null);
     }
 
     previousPage() {
         this.currentPageNumber--;
         if (this.currentPageNumber < 0) this.currentPageNumber = this.pages.length - 1;
-        this.msg.edit({ embed: this.pages[this.currentPageNumber] });
+        this.msg.edit({ embed: this.pages[this.currentPageNumber] }).catch(() => null);
+    }
+
+    delete() {
+        this.msg.delete().catch(() => null);
     }
 }
 
