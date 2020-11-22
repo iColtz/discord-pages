@@ -5,12 +5,15 @@ class DiscordEmbedPages {
         pages,
         channel,
         duration,
+        restricted,
     } = {}) {
         this.pages = pages instanceof Array ? pages : [];
 
         this.channel = channel instanceof TextChannel ? channel : null;
 
         this.duration = duration instanceof Number ? duration : 60000;
+
+        this.restricted = restricted;
 
         this.currentPageNumber = 0;
 
@@ -24,7 +27,13 @@ class DiscordEmbedPages {
             this.msg = msg;
             msg.react("◀️").catch(() => null);
             msg.react("▶️").catch(() => null);
-            const filter = (reaction, user) => user.id === this.message.author.id;
+            const filter = (reaction, user) => {
+                if (user.bot) return false;
+                if (!this.restricted) return true;
+                else if (this.restricted instanceof Function) return this.restricted(user);
+                else if (Array.isArray(this.restricted) && this.restricted.includes(user.id)) return true;
+                else if (typeof this.restricted === "string" && this.restricted === user.id) return true;
+            };
             const collector = msg.createReactionCollector(filter, { time: 60000 });
             collector.on("collect", (reaction) => {
                 switch(reaction.emoji.name) {
