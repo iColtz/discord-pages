@@ -11,7 +11,7 @@ class DiscordEmbedPages {
 
         this.channel = channel instanceof TextChannel ? channel : null;
 
-        this.duration = duration instanceof Number ? duration : 60000;
+        this.duration = duration || 60000;
 
         this.restricted = restricted;
 
@@ -34,7 +34,7 @@ class DiscordEmbedPages {
                 else if (Array.isArray(this.restricted) && this.restricted.includes(user.id)) return true;
                 else if (typeof this.restricted === "string" && this.restricted === user.id) return true;
             };
-            const collector = msg.createReactionCollector(filter, { time: 60000 });
+            const collector = msg.createReactionCollector(filter, { time: this.duration });
             collector.on("collect", (reaction) => {
                 switch(reaction.emoji.name) {
                 case "▶️":
