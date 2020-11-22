@@ -60,6 +60,11 @@ class DiscordEmbedPages {
         this.msg.edit({ embed: this.pages[this.currentPageNumber] }).catch(() => null);
     }
 
+    addPage(embed) {
+        if (!(embed instanceof MessageEmbed)) throw new Error("Adding embed is not a instance of a message embed.");
+        this.pages.push(embed);
+    }
+
     delete() {
         this.msg.delete().catch(() => null);
     }
