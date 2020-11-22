@@ -1,10 +1,16 @@
 const { Message, MessageEmbed } = require("discord.js");
 
 class DiscordEmbedPages {
-    constructor(pages, message) {
+    constructor({
+        pages,
+        message,
+        duration,
+    } = {}) {
         this.pages = pages instanceof Array ? pages : [];
 
-        this.message = (message instanceof Message) ? message : null;
+        this.message = message instanceof Message ? message : null;
+
+        this.duration = duration instanceof Number ? duration : 60000;
 
         this.currentPageNumber = 0;
 
@@ -13,12 +19,12 @@ class DiscordEmbedPages {
         });
     }
 
-    createPages(message) {
-        message.channel.send({ embed: this.pages[0] }).then(msg => {
+    createPages() {
+        this.message.channel.send({ embed: this.pages[0] }).then(msg => {
             this.msg = msg;
             msg.react("◀️").catch(() => null);
             msg.react("▶️").catch(() => null);
-            const filter = (reaction, user) => user.id === message.author.id;
+            const filter = (reaction, user) => user.id === this.message.author.id;
             const collector = msg.createReactionCollector(filter, { time: 60000 });
             collector.on("collect", (reaction) => {
                 switch(reaction.emoji.name) {
