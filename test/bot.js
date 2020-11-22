@@ -11,7 +11,8 @@ client.on("message", async (message) => {
         const embed2 = new MessageEmbed().setColor("BLUE").setDescription("Test Number 2");
         const embed3 = new MessageEmbed().setColor("YELLOW").setDescription("Test Number 3");
         const pages = [embed1, embed2, embed3];
-        new EmbedPages(pages, message);
+        const embedPages = new EmbedPages(pages, message);
+        embedPages.createPages(message);
     }
 });
 
