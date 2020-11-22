@@ -13,10 +13,6 @@ module.exports = {
             "error",
             4
         ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
         "quotes": [
             "error",
             "double"
