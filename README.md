@@ -10,7 +10,7 @@ npm install discord.js-pages
 // Import MessageEmbed from discord.js
 const { MessageEmbed } = require("discord.js");
 // Import the discord.js-pages package
-const DiscordPages = require("discord-pages");
+const DiscordPages = require("discord.js-pages");
 const embed1 = new MessageEmbed()
 
 // Create an array of embeds
