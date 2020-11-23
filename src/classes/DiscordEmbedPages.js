@@ -6,8 +6,9 @@ class DiscordEmbedPages {
         channel,
         duration,
         restricted,
+        pageFooter,
     } = {}) {
-        this.validate(pages, channel, duration, restricted);
+        this.validate(pages, channel, duration, restricted, pageFooter);
 
         this.pages = pages;
 
@@ -16,6 +17,8 @@ class DiscordEmbedPages {
         this.duration = duration || 60000;
 
         this.restricted = restricted;
+
+        this.pageFooter = pageFooter || true;
 
         this.currentPageNumber = 0;
 
@@ -74,7 +77,7 @@ class DiscordEmbedPages {
         this.msg.delete().catch(() => null);
     }
 
-    validate(pages, channel, duration, restricted) {
+    validate(pages, channel, duration, restricted, pageFooter) {
         if (!Array.isArray(pages)) {
             throw new Error("Pages option needs to be an array.");
         }
@@ -83,6 +86,9 @@ class DiscordEmbedPages {
         }
         else if (duration && typeof duration !== "number") {
             throw new Error("Duration needs to be a number.");
+        }
+        else if (typeof pageFooter !== "boolean") {
+            throw new Error("PageFooter needs to be a boolean.");
         }
         else if (restricted && (typeof restricted !== "string" && typeof restricted !== "function" && !Array.isArray(restricted))) {
             throw new Error("Restricted needs to be a string, object or function");
