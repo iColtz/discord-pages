@@ -33,6 +33,7 @@ class DiscordEmbedPages {
             this.msg = msg;
             msg.react("◀️").catch(() => null);
             msg.react("▶️").catch(() => null);
+            msg.react("⏹").catch(() => null);
             const filter = (reaction, user) => {
                 if (user.bot) return false;
                 if (!this.restricted) return true;
@@ -47,6 +48,8 @@ class DiscordEmbedPages {
                     return this.nextPage();
                 case "◀️":
                     return this.previousPage();
+                case "⏹":
+                    return this.delete();
                 }
             });
         });
