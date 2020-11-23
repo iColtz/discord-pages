@@ -6,8 +6,8 @@ const { TextChannel, MessageEmbed } = require("discord.js");
  * @prop {Array} pages - An array of message embed that will be in the embed pages.
  * @prop {Discord.TextChannel} channel - The channel the embed pages will be sent.
  * @prop {Number} [duration=60000] - The length the reaction collector will last.
- * @prop {Array<Snowflake>|String<Snowflake>|Function} - The restricted users to the embed pages.
- * @prop {Boolean} - Whether or not to have the page counter on the embed footer.
+ * @prop {Array<Snowflake>|String<Snowflake>|Function} [restricted] - The restricted users to the embed pages.
+ * @prop {Boolean} [pageFooter=true] - Whether or not to have the page counter on the embed footer.
  */
 
 class DiscordEmbedPages {
