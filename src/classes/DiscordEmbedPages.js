@@ -25,6 +25,7 @@ class DiscordEmbedPages {
     }
 
     createPages() {
+        this.pages[0].setFooter(`Page: 1/${this.pages.length}`);
         this.channel.send({ embed: this.pages[0] }).then(msg => {
             this.msg = msg;
             msg.react("◀️").catch(() => null);
@@ -51,18 +52,22 @@ class DiscordEmbedPages {
     nextPage() {
         this.currentPageNumber++;
         if (this.currentPageNumber >= this.pages.length) this.currentPageNumber = 0;
-        this.msg.edit({ embed: this.pages[this.currentPageNumber] }).catch(() => null);
+        const embed = this.pages[this.currentPageNumber].setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
+        this.msg.edit({ embed: embed }).catch(() => null);
     }
 
     previousPage() {
         this.currentPageNumber--;
         if (this.currentPageNumber < 0) this.currentPageNumber = this.pages.length - 1;
-        this.msg.edit({ embed: this.pages[this.currentPageNumber] }).catch(() => null);
+        const embed = this.pages[this.currentPageNumber].setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
+        this.msg.edit({ embed: embed }).catch(() => null);
     }
 
     addPage(embed) {
         if (!(embed instanceof MessageEmbed)) throw new Error("Adding embed is not a instance of a message embed.");
         this.pages.push(embed);
+        const currentEmbed = this.pages[this.currentPageNumber].setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
+        this.msg.edit({ embed: currentEmbed });
     }
 
     delete() {
