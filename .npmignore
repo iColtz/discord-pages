@@ -1,0 +1,6 @@
+# NPM
+node_modules
+./test
+.eslintrc.js
+.gitattributes
+.gitignore
