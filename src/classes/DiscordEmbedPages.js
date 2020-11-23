@@ -21,10 +21,6 @@ class DiscordEmbedPages {
         this.pageFooter = Boolean(pageFooter);
 
         this.currentPageNumber = 0;
-
-        this.pages.forEach(embed => {
-            if (!(embed instanceof MessageEmbed)) throw new Error("An element in the pages array is not a discord message embed.");
-        });
     }
 
     createPages() {
@@ -118,6 +114,9 @@ class DiscordEmbedPages {
     validate(pages, channel, duration, restricted, pageFooter) {
         if (!Array.isArray(pages)) {
             throw new Error("Pages option needs to be an array.");
+        }
+        else if (pages.some(page => !(page instanceof MessageEmbed))) {
+            throw new Error("An element in the pages array is not a discord message embed.");
         }
         else if (!(channel instanceof TextChannel)) {
             throw new Error("Channel needs to be a discord text channel.");
