@@ -79,6 +79,23 @@ class DiscordEmbedPages {
         this.msg.edit({ embed: currentEmbed });
     }
 
+    deletePage(pageNumber) {
+        if (pageNumber < 0 || pageNumber > this.pages.length - 1) return console.warn("Deleting page does not exist.");
+        this.pages.splice(pageNumber, 1);
+        if (this.pages.length === this.currentPageNumber) {
+            this.currentPageNumber--;
+            const embed = this.pages[this.currentPageNumber];
+            if (!embed) return this.delete();
+            if (this.pageFooter) embed.setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
+            this.msg.edit({ embed: embed });
+        }
+        else {
+            const embed = this.pages[this.currentPageNumber];
+            if (this.pageFooter) embed.setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
+            this.msg.edit({ embed: embed });
+        }
+    }
+
     delete() {
         this.msg.delete().catch(() => null);
     }
