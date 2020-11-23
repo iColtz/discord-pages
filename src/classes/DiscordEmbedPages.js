@@ -28,6 +28,7 @@ class DiscordEmbedPages {
     }
 
     createPages() {
+        if (!this.pages[0]) throw new Error("Tried to create embed pages with no pages in the pages array.");
         if (this.pageFooter) this.pages[0].setFooter(`Page: 1/${this.pages.length}`);
         this.channel.send({ embed: this.pages[0] }).then(msg => {
             this.msg = msg;
@@ -56,6 +57,7 @@ class DiscordEmbedPages {
     }
 
     nextPage() {
+        if (!this.msg) throw new Error("Tried to go to next page but embed pages havn't been created yet.");
         this.currentPageNumber++;
         if (this.currentPageNumber >= this.pages.length) this.currentPageNumber = 0;
         const embed = this.pages[this.currentPageNumber];
@@ -64,6 +66,7 @@ class DiscordEmbedPages {
     }
 
     previousPage() {
+        if (!this.msg) throw new Error("Tried to go to previous page but embed pages havn't been created yet.");
         this.currentPageNumber--;
         if (this.currentPageNumber < 0) this.currentPageNumber = this.pages.length - 1;
         const embed = this.pages[this.currentPageNumber];
@@ -72,6 +75,7 @@ class DiscordEmbedPages {
     }
 
     addPage(embed) {
+        if (!this.msg) throw new Error("Tried to add page before embed pages have even been created.");
         if (!(embed instanceof MessageEmbed)) throw new Error("Adding embed is not a instance of a message embed.");
         this.pages.push(embed);
         const currentEmbed = this.pages[this.currentPageNumber];
@@ -80,7 +84,8 @@ class DiscordEmbedPages {
     }
 
     deletePage(pageNumber) {
-        if (pageNumber < 0 || pageNumber > this.pages.length - 1) return console.warn("Deleting page does not exist.");
+        if (!this.msg) throw new Error("Tried to delete page before embed pages have even been created.");
+        if (pageNumber < 0 || pageNumber > this.pages.length - 1) throw new Error("Deleting page does not exist.");
         this.pages.splice(pageNumber, 1);
         if (this.pages.length === this.currentPageNumber) {
             this.currentPageNumber--;
@@ -97,7 +102,8 @@ class DiscordEmbedPages {
     }
 
     turnToPage(pageNumber) {
-        if (pageNumber < 0 || pageNumber > this.pages.length - 1) return console.warn("Turning page does not exist.");
+        if (!this.msg) throw new Error("Tried to turn to page before embed pages have even been created.");
+        if (pageNumber < 0 || pageNumber > this.pages.length - 1) throw new Error("Turning page does not exist.");
         this.currentPageNumber = pageNumber;
         const embed = this.pages[this.currentPageNumber];
         if (this.pageFooter) embed.setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
@@ -105,6 +111,7 @@ class DiscordEmbedPages {
     }
 
     delete() {
+        if (!this.msg) throw new Error("Tried to delete embed pages but they havn't even been created yet.");
         this.msg.delete().catch(() => null);
     }
 
