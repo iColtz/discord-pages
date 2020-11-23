@@ -1,16 +1,16 @@
-## Discord.js-Pages
-**discord.js-pages** is an easy to use package for making discord embed pages, with many functions!
+## discord-pages
+**discord-pages** is an easy to use package for making discord embed pages, with many functions!
 Build with discord.js@^12.0.0.
 ## Installation
 ```
-npm install discord.js-pages
+npm install discord-pages
 ```
 ## Basic Example
 ```js
 // Import MessageEmbed from discord.js
 const { MessageEmbed } = require("discord.js");
-// Import the discord.js-pages package
-const DiscordPages = require("discord.js-pages");
+// Import the discord-pages package
+const DiscordPages = require("discord-pages");
 const embed1 = new MessageEmbed()
 
 // Create an array of embeds
@@ -36,7 +36,7 @@ embedPages.createPages();
 - `restricted` `(Array|String|Function)` - Restrict embed page reactions to be only used by certain users. Default if undefined.
 - `pageFooter` `(Boolean)` - Whether to add a footer on embeds of the current page number. Default true.
 ## Extra Functions
-**discord.js-pages** has many other functions for your embed pages.
+**discord-pages** has many other functions for your embed pages.
 - `embedPages.delete()` - Deletes the embed pages message.
 - `embedPages.nextPage()` - Turns the embed pages to the next page.
 - `embedPages.previousPage()` - Turns the embed pages to the previous page.
