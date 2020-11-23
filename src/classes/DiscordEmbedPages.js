@@ -90,6 +90,9 @@ class DiscordEmbedPages {
                     return this.delete();
                 }
             });
+            collector.on("end", () => {
+                this.msg.reactions.removeAll().catch(() => null);
+            });
         });
     }
 
