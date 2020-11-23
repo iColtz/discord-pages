@@ -96,6 +96,14 @@ class DiscordEmbedPages {
         }
     }
 
+    turnToPage(pageNumber) {
+        if (pageNumber < 0 || pageNumber > this.pages.length - 1) return console.warn("Turning page does not exist.");
+        this.currentPageNumber = pageNumber;
+        const embed = this.pages[this.currentPageNumber];
+        if (this.pageFooter) embed.setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
+        this.msg.edit({ embed: embed }).catch(() => null);
+    }
+
     delete() {
         this.msg.delete().catch(() => null);
     }
