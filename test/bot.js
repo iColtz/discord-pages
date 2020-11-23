@@ -16,6 +16,7 @@ client.on("message", async (message) => {
             channel: message.channel, 
             restricted: (user) => user.id === message.author.id,
             duration: 10000,
+            pageFooter: true,
         });
         embedPages.createPages();
     }
