@@ -186,13 +186,13 @@ class DiscordEmbedPages {
         else if (!(this.channel instanceof TextChannel)) {
             throw new Error("Channel needs to be a discord text channel.");
         }
-        else if (this.duration && typeof duration !== "number") {
+        else if (this.duration && typeof this.duration !== "number") {
             throw new Error("Duration needs to be a number.");
         }
-        else if (this.pageFooter && typeof pageFooter !== "boolean") {
+        else if (this.pageFooter && typeof this.pageFooter !== "boolean") {
             throw new Error("PageFooter needs to be a boolean.");
         }
-        else if (this.restricted && (typeof restricted !== "string" && typeof restricted !== "function" && !Array.isArray(this.restricted))) {
+        else if (this.restricted && (typeof this.restricted !== "string" && typeof this.restricted === "function" && Array.isArray(this.restricted))) {
             throw new Error("Restricted needs to be a string, object or function");
         }
     }
