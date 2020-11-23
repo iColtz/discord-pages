@@ -18,7 +18,7 @@ class DiscordEmbedPages {
 
         this.restricted = restricted;
 
-        this.pageFooter = pageFooter || true;
+        this.pageFooter = Boolean(pageFooter);
 
         this.currentPageNumber = 0;
 
@@ -28,7 +28,7 @@ class DiscordEmbedPages {
     }
 
     createPages() {
-        this.pages[0].setFooter(`Page: 1/${this.pages.length}`);
+        if (this.pageFooter) this.pages[0].setFooter(`Page: 1/${this.pages.length}`);
         this.channel.send({ embed: this.pages[0] }).then(msg => {
             this.msg = msg;
             msg.react("◀️").catch(() => null);
@@ -55,21 +55,24 @@ class DiscordEmbedPages {
     nextPage() {
         this.currentPageNumber++;
         if (this.currentPageNumber >= this.pages.length) this.currentPageNumber = 0;
-        const embed = this.pages[this.currentPageNumber].setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
+        const embed = this.pages[this.currentPageNumber];
+        if (this.pageFooter) embed.setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
         this.msg.edit({ embed: embed }).catch(() => null);
     }
 
     previousPage() {
         this.currentPageNumber--;
         if (this.currentPageNumber < 0) this.currentPageNumber = this.pages.length - 1;
-        const embed = this.pages[this.currentPageNumber].setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
+        const embed = this.pages[this.currentPageNumber];
+        if (this.pageFooter) embed.setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
         this.msg.edit({ embed: embed }).catch(() => null);
     }
 
     addPage(embed) {
         if (!(embed instanceof MessageEmbed)) throw new Error("Adding embed is not a instance of a message embed.");
         this.pages.push(embed);
-        const currentEmbed = this.pages[this.currentPageNumber].setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
+        const currentEmbed = this.pages[this.currentPageNumber];
+        if (this.pageFooter) currentEmbed.setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
         this.msg.edit({ embed: currentEmbed });
     }
 
@@ -87,7 +90,7 @@ class DiscordEmbedPages {
         else if (duration && typeof duration !== "number") {
             throw new Error("Duration needs to be a number.");
         }
-        else if (typeof pageFooter !== "boolean") {
+        else if (pageFooter && typeof pageFooter !== "boolean") {
             throw new Error("PageFooter needs to be a boolean.");
         }
         else if (restricted && (typeof restricted !== "string" && typeof restricted !== "function" && !Array.isArray(restricted))) {
