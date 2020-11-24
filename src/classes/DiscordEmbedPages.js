@@ -1,4 +1,4 @@
-const { TextChannel, MessageEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 /**
  * Options used to determine how to embed pages should be constructed.
@@ -57,8 +57,6 @@ class DiscordEmbedPages {
          * @type {Number}
          */
         this.currentPageNumber = 0;
-
-        this.validate();
     }
 
     /**
@@ -174,30 +172,6 @@ class DiscordEmbedPages {
     delete() {
         if (!this.msg) throw new Error("Tried to delete embed pages but they havn't even been created yet.");
         this.msg.delete().catch(() => null);
-    }
-
-    /**
-     * Validates the embed pages options are correct.
-     */
-    validate() {
-        if (!Array.isArray(this.pages)) {
-            throw new Error("Pages option needs to be an array.");
-        }
-        else if (this.pages.some(page => !(page instanceof MessageEmbed))) {
-            throw new Error("An element in the pages array is not a discord message embed.");
-        }
-        else if (!(this.channel instanceof TextChannel)) {
-            throw new Error("Channel needs to be a discord text channel.");
-        }
-        else if (this.duration && typeof this.duration !== "number") {
-            throw new Error("Duration needs to be a number.");
-        }
-        else if (this.pageFooter && typeof this.pageFooter !== "boolean") {
-            throw new Error("PageFooter needs to be a boolean.");
-        }
-        else if (this.restricted && (typeof this.restricted !== "string" && typeof this.restricted === "function" && Array.isArray(this.restricted))) {
-            throw new Error("Restricted needs to be a string, object or function");
-        }
     }
 }
 
