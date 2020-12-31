@@ -73,7 +73,7 @@ class DiscordEmbedPages {
         if (this.pageFooter) this.pages[0].setFooter(`Page: 1/${this.pages.length}`);
         this.channel.send({ embed: this.pages[0] }).then(msg => {
             this.msg = msg;
-            this.react(msg)
+            this.react(msg);
             const filter = (reaction, user) => {
                 if (user.bot) return false;
                 if (!this.restricted) return true;
