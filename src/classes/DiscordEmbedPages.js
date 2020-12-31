@@ -85,8 +85,10 @@ class DiscordEmbedPages {
             collector.on("collect", (reaction) => {
                 switch(reaction.emoji.name) {
                 case "▶️":
+                    reaction.users.remove(reaction.users.cache.filter(user => user.id !== this.msg.author.id).first().id);
                     return this.nextPage();
                 case "◀️":
+                    reaction.users.remove(reaction.users.cache.filter(user => user.id !== this.msg.author.id).first().id);
                     return this.previousPage();
                 case "⏹":
                     return this.delete();
@@ -175,7 +177,7 @@ class DiscordEmbedPages {
      */
     delete() {
         if (!this.msg) throw new Error("Tried to delete embed pages but they havn't even been created yet.");
-        this.msg.delete().catch(() => null);
+        this.msg.reactions.removeAll().catch(() => null);
     }
 }
 
