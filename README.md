@@ -1,6 +1,6 @@
 ## discord-pages (1gpex)
 
-# Note
+## Note
 Fork for edit something
 
 **discord-pages** is an easy to use package for making discord embed pages, with many functions!
