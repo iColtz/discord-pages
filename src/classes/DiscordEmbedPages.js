@@ -50,7 +50,7 @@ class DiscordEmbedPages {
          * Whether to have a page counter on the embed footers.
          * @type {Boolean}
          */
-        this.pageFooter = pageFooter || true;
+        this.pageFooter = pageFooter ?? true;
 
         /**
          * The current page number to embed pages is on.
