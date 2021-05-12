@@ -1,4 +1,5 @@
 ## discord-pages
+
 **discord-pages** is an easy to use package for making discord embed pages, with many functions!
 Build with discord.js@^12.0.0.
 ## Installation

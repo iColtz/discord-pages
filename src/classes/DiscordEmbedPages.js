@@ -59,6 +59,12 @@ class DiscordEmbedPages {
         this.currentPageNumber = 0;
     }
 
+    react(msg) {
+        msg.react("◀️").catch(() => null);
+        msg.react("⏹").catch(() => null);
+        msg.react("▶️").catch(() => null);
+    }
+
     /**
      * Creates and sends the embed pages.
      */
@@ -67,9 +73,7 @@ class DiscordEmbedPages {
         if (this.pageFooter) this.pages[0].setFooter(`Page: 1/${this.pages.length}`);
         this.channel.send({ embed: this.pages[0] }).then(msg => {
             this.msg = msg;
-            msg.react("◀️").catch(() => null);
-            msg.react("▶️").catch(() => null);
-            msg.react("⏹").catch(() => null);
+            this.react(msg);
             const filter = (reaction, user) => {
                 if (user.bot) return false;
                 if (!this.restricted) return true;
@@ -82,8 +86,10 @@ class DiscordEmbedPages {
             reaction.users.remove(user.id);
                 switch(reaction.emoji.name) {
                 case "▶️":
+                    reaction.users.remove(reaction.users.cache.filter(user => user.id !== this.msg.author.id).first().id);
                     return this.nextPage();
                 case "◀️":
+                    reaction.users.remove(reaction.users.cache.filter(user => user.id !== this.msg.author.id).first().id);
                     return this.previousPage();
                 case "⏹":
                     return this.delete();
@@ -172,7 +178,7 @@ class DiscordEmbedPages {
      */
     delete() {
         if (!this.msg) throw new Error("Tried to delete embed pages but they havn't even been created yet.");
-        this.msg.delete().catch(() => null);
+        this.msg.reactions.removeAll().catch(() => null);
     }
 }
 

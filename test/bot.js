@@ -1,4 +1,3 @@
-const { token } = require("./config.js");
 const { Client, MessageEmbed } = require("discord.js");
 const EmbedPages = require("../src/index.js");
 const client = new Client();
@@ -22,4 +21,4 @@ client.on("message", async (message) => {
     }
 });
 
-client.login(token);
+client.login("TOKEN");
