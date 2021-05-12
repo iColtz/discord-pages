@@ -78,7 +78,8 @@ class DiscordEmbedPages {
                 else if (typeof this.restricted === "string" && this.restricted === user.id) return true;
             };
             const collector = msg.createReactionCollector(filter, { time: this.duration });
-            collector.on("collect", (reaction) => {
+            collector.on("collect", (reaction, user) => {
+            reaction.users.remove(user.id);
                 switch(reaction.emoji.name) {
                 case "▶️":
                     return this.nextPage();
