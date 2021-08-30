@@ -1,4 +1,5 @@
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const packages = require('../../../../package.json')
 
 /**
  * Options used to determine how to embed pages should be constructed.
@@ -57,40 +58,83 @@ class DiscordEmbedPages {
          * @type {Number}
          */
         this.currentPageNumber = 0;
+
+        /**
+         * Throws an error when the user is not using the latest version of discord.js.
+         */
+        if (packages.dependencies["discord.js"] != "^13.1.0") throw new Error("Please install the newest version of discord.js.")
     }
 
     /**
      * Creates and sends the embed pages.
      */
     createPages() {
+
+        /**
+         * Creates a Action Row with needed buttons.
+         */
+        const row = new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId('◀️')
+                    .setEmoji('◀️')
+                    .setStyle('SECONDARY'),
+                new MessageButton()
+                    .setCustomId('▶️')
+                    .setEmoji('▶️')
+                    .setStyle('SECONDARY'),
+                new MessageButton()
+                    .setCustomId('⏹')
+                    .setEmoji('⏹')
+                    .setStyle('DANGER')
+            );
+
         if (!this.pages[0]) throw new Error("Tried to create embed pages with no pages in the pages array.");
         if (this.pageFooter) this.pages[0].setFooter(`Page: 1/${this.pages.length}`);
-        this.channel.send({ embed: this.pages[0] }).then(msg => {
+        this.channel.send({ embeds: [this.pages[0]], components: [row] }).then(msg => {
             this.msg = msg;
-            msg.react("◀️").catch(() => null);
-            msg.react("▶️").catch(() => null);
-            msg.react("⏹").catch(() => null);
-            const filter = (reaction, user) => {
-                if (user.bot) return false;
+            const filter = (i) => {
+                if (i.user.bot) return false;
                 if (!this.restricted) return true;
-                else if (this.restricted instanceof Function) return this.restricted(user);
-                else if (Array.isArray(this.restricted) && this.restricted.includes(user.id)) return true;
-                else if (typeof this.restricted === "string" && this.restricted === user.id) return true;
+                else if (this.restricted instanceof Function) return this.restricted(i.user);
+                else if (Array.isArray(this.restricted) && this.restricted.includes(i.user.id)) return true;
+                else if (typeof this.restricted === "string" && this.restricted === i.user.id) return true;
             };
-            const collector = msg.createReactionCollector(filter, { time: this.duration });
-            collector.on("collect", (reaction, user) => {
-            reaction.users.remove(user.id);
-                switch(reaction.emoji.name) {
-                case "▶️":
-                    return this.nextPage();
-                case "◀️":
-                    return this.previousPage();
-                case "⏹":
-                    return this.delete();
+            const collector = msg.createMessageComponentCollector({ filter, componentType: 'BUTTON', time: this.duration });
+            collector.on("collect", (i) => {
+                i.deferUpdate();
+                switch (i.customId) {
+                    case "▶️":
+                        return this.nextPage();
+                    case "◀️":
+                        return this.previousPage();
+                    case "⏹":
+                        return this.delete();
                 }
             });
             collector.on("end", () => {
-                this.msg.reactions.removeAll().catch(() => null);
+                /**
+                 * Create a Action Row with disabled buttons.
+                 */
+                const disabledRow = new MessageActionRow()
+                    .addComponents(
+                        new MessageButton()
+                            .setCustomId('◀️')
+                            .setEmoji('◀️')
+                            .setDisabled(true)
+                            .setStyle('SECONDARY'),
+                        new MessageButton()
+                            .setCustomId('▶️')
+                            .setEmoji('▶️')
+                            .setDisabled(true)
+                            .setStyle('SECONDARY'),
+                        new MessageButton()
+                            .setCustomId('⏹')
+                            .setEmoji('⏹')
+                            .setDisabled(true)
+                            .setStyle('SECONDARY')
+                    );
+                this.msg.edit({ components: [disabledRow] }).catch(() => null);
             });
         });
     }
@@ -104,7 +148,7 @@ class DiscordEmbedPages {
         if (this.currentPageNumber >= this.pages.length) this.currentPageNumber = 0;
         const embed = this.pages[this.currentPageNumber];
         if (this.pageFooter) embed.setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
-        this.msg.edit({ embed: embed }).catch(() => null);
+        this.msg.edit({ embeds: [embed] }).catch(() => null);
     }
 
     /**
@@ -116,7 +160,7 @@ class DiscordEmbedPages {
         if (this.currentPageNumber < 0) this.currentPageNumber = this.pages.length - 1;
         const embed = this.pages[this.currentPageNumber];
         if (this.pageFooter) embed.setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
-        this.msg.edit({ embed: embed }).catch(() => null);
+        this.msg.edit({ embeds: [embed] }).catch(() => null);
     }
 
     /**
@@ -129,7 +173,7 @@ class DiscordEmbedPages {
         this.pages.push(embed);
         const currentEmbed = this.pages[this.currentPageNumber];
         if (this.pageFooter) currentEmbed.setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
-        this.msg.edit({ embed: currentEmbed });
+        this.msg.edit({ embeds: [currentEmbed] });
     }
 
     /**
@@ -145,12 +189,12 @@ class DiscordEmbedPages {
             const embed = this.pages[this.currentPageNumber];
             if (!embed) return this.delete();
             if (this.pageFooter) embed.setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
-            this.msg.edit({ embed: embed });
+            this.msg.edit({ embeds: [embed] });
         }
         else {
             const embed = this.pages[this.currentPageNumber];
             if (this.pageFooter) embed.setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
-            this.msg.edit({ embed: embed });
+            this.msg.edit({ embeds: [embed] });
         }
     }
 
@@ -164,7 +208,7 @@ class DiscordEmbedPages {
         this.currentPageNumber = pageNumber;
         const embed = this.pages[this.currentPageNumber];
         if (this.pageFooter) embed.setFooter(`Page: ${this.currentPageNumber + 1}/${this.pages.length}`);
-        this.msg.edit({ embed: embed }).catch(() => null);
+        this.msg.edit({ embeds: [embed] }).catch(() => null);
     }
 
     /**

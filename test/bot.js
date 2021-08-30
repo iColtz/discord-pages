@@ -1,11 +1,11 @@
 const { token } = require("./config.js");
-const { Client, MessageEmbed } = require("discord.js");
+const { Client, MessageEmbed, Intents } = require("discord.js");
 const EmbedPages = require("../src/index.js");
-const client = new Client();
+const client = new Client({ intents: [ Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS ] });
 
 client.once("ready", () => console.log("Yoo this is ready!"));
 
-client.on("message", async (message) => {
+client.on("messageCreate", async (message) => {
     if (message.content.startsWith("?test")) {
         const embed1 = new MessageEmbed().setColor("RED").setDescription("Test Number 1");
         const embed2 = new MessageEmbed().setColor("BLUE").setDescription("Test Number 2");
