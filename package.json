@@ -1,6 +1,6 @@
 {
   "name": "discord-pages",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Make discord page embeds easily!",
   "main": "./src/index.js",
   "scripts": {
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/iColtz/discord-pages#readme",
   "dependencies": {
-    "discord.js": "^12.5.0"
+    "discord.js": "^13.1.0"
   },
   "devDependencies": {
     "eslint": "^7.14.0",
