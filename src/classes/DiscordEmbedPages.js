@@ -86,7 +86,7 @@ class DiscordEmbedPages {
                 new MessageButton()
                     .setCustomId('⏹')
                     .setEmoji('⏹')
-                    .setStyle('SECONDARY')
+                    .setStyle('DANGER')
             );
 
         if (!this.pages[0]) throw new Error("Tried to create embed pages with no pages in the pages array.");
